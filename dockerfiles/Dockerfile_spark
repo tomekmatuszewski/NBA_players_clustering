@@ -1,0 +1,11 @@
+FROM bitnami/spark:latest
+USER ${SPARK_UID}:${SPARK_GID}
+COPY ./requirements_spark.txt .
+RUN pip install -r requirements_spark.txt
+COPY ./spark/jars/postgresql-42.3.2.jar ./jars/postgresql-42.3.2.jar
+USER root
+
+RUN apt-get update -y
+RUN apt-get install wget -y
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt install ./google-chrome-stable_current_amd64.deb -y

@@ -1,0 +1,52 @@
+[2022-02-11 16:24:59,642] {taskinstance.py:896} INFO - Dependencies all met for <TaskInstance: spark_first_run.spark_job 2022-02-11T16:24:56.308164+00:00 [queued]>
+[2022-02-11 16:24:59,719] {taskinstance.py:896} INFO - Dependencies all met for <TaskInstance: spark_first_run.spark_job 2022-02-11T16:24:56.308164+00:00 [queued]>
+[2022-02-11 16:24:59,720] {taskinstance.py:1087} INFO - 
+--------------------------------------------------------------------------------
+[2022-02-11 16:24:59,720] {taskinstance.py:1088} INFO - Starting attempt 1 of 1
+[2022-02-11 16:24:59,720] {taskinstance.py:1089} INFO - 
+--------------------------------------------------------------------------------
+[2022-02-11 16:24:59,746] {taskinstance.py:1107} INFO - Executing <Task(SparkSubmitOperator): spark_job> on 2022-02-11T16:24:56.308164+00:00
+[2022-02-11 16:24:59,753] {standard_task_runner.py:52} INFO - Started process 48 to run task
+[2022-02-11 16:24:59,760] {standard_task_runner.py:76} INFO - Running: ['***', 'tasks', 'run', 'spark_first_run', 'spark_job', '2022-02-11T16:24:56.308164+00:00', '--job-id', '109', '--pool', 'default_pool', '--raw', '--subdir', 'DAGS_FOLDER/task.py', '--cfg-path', '/tmp/tmpa_1l7avz', '--error-file', '/tmp/tmpno137755']
+[2022-02-11 16:24:59,761] {standard_task_runner.py:77} INFO - Job 109: Subtask spark_job
+[2022-02-11 16:24:59,868] {logging_mixin.py:104} INFO - Running <TaskInstance: spark_first_run.spark_job 2022-02-11T16:24:56.308164+00:00 [running]> on host c251e755c56b
+[2022-02-11 16:25:00,050] {taskinstance.py:1300} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=admin
+AIRFLOW_CTX_DAG_ID=spark_first_run
+AIRFLOW_CTX_TASK_ID=spark_job
+AIRFLOW_CTX_EXECUTION_DATE=2022-02-11T16:24:56.308164+00:00
+AIRFLOW_CTX_DAG_RUN_ID=manual__2022-02-11T16:24:56.308164+00:00
+[2022-02-11 16:25:00,109] {spark_submit.py:228} INFO - Could not load connection string spark_default, defaulting to yarn
+[2022-02-11 16:25:00,111] {spark_submit.py:360} INFO - Spark-Submit cmd: spark-submit --master yarn --conf spark.master=spark://spark:7077 --name test --verbose /opt/bitnami/spark/app/test.py
+[2022-02-11 16:25:17,497] {spark_submit.py:514} INFO - Using properties file: null
+[2022-02-11 16:25:18,282] {spark_submit.py:514} INFO - WARNING: An illegal reflective access operation has occurred
+[2022-02-11 16:25:18,282] {spark_submit.py:514} INFO - WARNING: Illegal reflective access by org.apache.spark.unsafe.Platform (file:/home/***/.local/lib/python3.8/site-packages/pyspark/jars/spark-unsafe_2.12-3.2.1.jar) to constructor java.nio.DirectByteBuffer(long,int)
+[2022-02-11 16:25:18,282] {spark_submit.py:514} INFO - WARNING: Please consider reporting this to the maintainers of org.apache.spark.unsafe.Platform
+[2022-02-11 16:25:18,283] {spark_submit.py:514} INFO - WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+[2022-02-11 16:25:18,283] {spark_submit.py:514} INFO - WARNING: All illegal access operations will be denied in a future release
+[2022-02-11 16:25:18,472] {spark_submit.py:514} INFO - Exception in thread "main" org.apache.spark.SparkException: When running with master 'yarn' either HADOOP_CONF_DIR or YARN_CONF_DIR must be set in the environment.
+[2022-02-11 16:25:18,473] {spark_submit.py:514} INFO - at org.apache.spark.deploy.SparkSubmitArguments.error(SparkSubmitArguments.scala:634)
+[2022-02-11 16:25:18,473] {spark_submit.py:514} INFO - at org.apache.spark.deploy.SparkSubmitArguments.validateSubmitArguments(SparkSubmitArguments.scala:274)
+[2022-02-11 16:25:18,473] {spark_submit.py:514} INFO - at org.apache.spark.deploy.SparkSubmitArguments.validateArguments(SparkSubmitArguments.scala:234)
+[2022-02-11 16:25:18,474] {spark_submit.py:514} INFO - at org.apache.spark.deploy.SparkSubmitArguments.<init>(SparkSubmitArguments.scala:119)
+[2022-02-11 16:25:18,474] {spark_submit.py:514} INFO - at org.apache.spark.deploy.SparkSubmit$$anon$2$$anon$3.<init>(SparkSubmit.scala:1026)
+[2022-02-11 16:25:18,474] {spark_submit.py:514} INFO - at org.apache.spark.deploy.SparkSubmit$$anon$2.parseArguments(SparkSubmit.scala:1026)
+[2022-02-11 16:25:18,474] {spark_submit.py:514} INFO - at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:85)
+[2022-02-11 16:25:18,474] {spark_submit.py:514} INFO - at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1043)
+[2022-02-11 16:25:18,475] {spark_submit.py:514} INFO - at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1052)
+[2022-02-11 16:25:18,475] {spark_submit.py:514} INFO - at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+[2022-02-11 16:25:18,531] {taskinstance.py:1501} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 1157, in _run_raw_task
+    self._prepare_and_execute_task_with_callbacks(context, task)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 1331, in _prepare_and_execute_task_with_callbacks
+    result = self._execute_task(context, task_copy)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 1361, in _execute_task
+    result = task_copy.execute(context=context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/apache/spark/operators/spark_submit.py", line 182, in execute
+    self._hook.submit(self._application)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/apache/spark/hooks/spark_submit.py", line 445, in submit
+    raise AirflowException(
+airflow.exceptions.AirflowException: Cannot execute: spark-submit --master yarn --conf spark.master=spark://spark:7077 --name test --verbose /opt/bitnami/spark/app/test.py. Error code is: 1.
+[2022-02-11 16:25:18,562] {taskinstance.py:1544} INFO - Marking task as FAILED. dag_id=spark_first_run, task_id=spark_job, execution_date=20220211T162456, start_date=20220211T162459, end_date=20220211T162518
+[2022-02-11 16:25:18,759] {local_task_job.py:151} INFO - Task exited with return code 1

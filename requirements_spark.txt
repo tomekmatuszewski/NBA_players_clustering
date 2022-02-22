@@ -1,0 +1,7 @@
+requests
+python-dotenv
+lxml
+beautifulsoup4
+psycopg2-binary
+selenium
+webdriver-manager

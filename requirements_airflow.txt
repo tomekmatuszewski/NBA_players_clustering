@@ -1,0 +1,10 @@
+requests
+python-dotenv
+pyspark
+lxml
+beautifulsoup4
+psycopg2-binary
+apache-airflow-providers-apache-spark
+apache-airflow-providers-postgres
+selenium
+webdriver-manager

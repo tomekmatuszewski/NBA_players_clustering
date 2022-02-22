@@ -1,0 +1,4 @@
+FROM postgres:13
+COPY ./dags/sql/create_db.sql ./docker-entrypoint-initdb.d/create_db.sql
+
+ENV PGDATA=/data
