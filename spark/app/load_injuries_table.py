@@ -3,11 +3,9 @@ import os
 import sys
 from pyspark.sql import SparkSession
 from pathlib import Path
-from web_scraper_extract_stats import get_stats_data, get_urls_and_table_names, get_schema_stats
-from spark_transform import create_table_schema, create_dataframe, get_converted_stats_df
-
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
+from web_scraper_extract_injuries import get_schema, scrap_urls_and_flags, main_crawler
+from spark_transform import create_table_schema, create_dataframe, filter_injuries_df
+import asyncio
 
 BASEDIR = Path(__file__).resolve().parent.parent
 
@@ -40,25 +38,23 @@ spark = SparkSession.builder \
 sc = spark.sparkContext
 
 
-def load_to_postgres(url: str, table: str, service) -> None:
-    column_names, data = get_schema_stats(url), get_stats_data(url, service)
-    schema = create_table_schema(column_names)
-    df = create_dataframe(data, schema, spark, table)
-    df = get_converted_stats_df(df)
+def load_to_postgres(url_table: tuple, data: list) -> None:
+    schema = create_table_schema(get_schema(url_table[0]))
+    df = create_dataframe(data, schema, spark, url_table[1])
+    df = filter_injuries_df(df)
     df.write.format("jdbc"). \
         option("url", postgres_db). \
         option("driver", "org.postgresql.Driver"). \
-        option("dbtable", f"public.player_stats_data"). \
+        option("dbtable", f"public.players_injuries"). \
         option("user", postgres_db_user). \
         option("password", postgres_db_password). \
         mode("append"). \
         save()
 
 
-urls = get_urls_and_table_names(STATS_DATA_URL, URL_STATS_PATTERN_SEASON)
+urls_flags = scrap_urls_and_flags(os.getenv('INJURIES_DATA_URL'))
+data = asyncio.run(main_crawler(urls_flags))
+zipped_data = list(zip(urls_flags, data))
 
-# install chrome driver used by selenium
-service = Service(ChromeDriverManager().install())
-
-for url, table in urls:
-    load_to_postgres(url, table, service)
+for url_table, data in zipped_data:
+    load_to_postgres(url_table, data)

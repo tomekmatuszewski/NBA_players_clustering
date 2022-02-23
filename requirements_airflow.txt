@@ -8,3 +8,5 @@ apache-airflow-providers-apache-spark
 apache-airflow-providers-postgres
 selenium
 webdriver-manager
+aiohttp
+asyncio
