@@ -2,12 +2,12 @@ import logging
 import os
 import sys
 from pyspark.sql import SparkSession
-from pathlib import Path
-from web_scraper_extract_injuries import get_schema, scrap_urls_and_flags, main_crawler
-from spark_transform import create_table_schema, create_dataframe, filter_injuries_df
+from web_scraper_extract_salaries import get_schema, scrap_urls_and_flags, main_crawler
+from spark_transform import create_table_schema, create_dataframe, transform_df_salaries
 import asyncio
+import pathlib
 
-BASEDIR = Path(__file__).resolve().parent.parent
+BASEDIR = pathlib.Path(__name__).resolve().parent.parent
 
 logging.basicConfig(
     level=logging.INFO,
@@ -17,7 +17,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # env variables
-URL = os.getenv('INJURIES_DATA_URL')
+URL = os.getenv("SALARIES_DATA_URL")
 postgres_db_user = os.getenv('POSTGRES_DB_USER')
 postgres_db_password = os.getenv('POSTGRES_DB_PASSWORD')
 
@@ -37,15 +37,16 @@ spark = SparkSession.builder \
 def load_to_postgres(url_table: tuple, data: list) -> None:
     schema = create_table_schema(get_schema(url_table[0]))
     df = create_dataframe(data, schema, spark, url_table[1])
-    df = filter_injuries_df(df)
-    df.write.format("jdbc"). \
-        option("url", postgres_db). \
-        option("driver", "org.postgresql.Driver"). \
-        option("dbtable", f"public.players_injuries"). \
-        option("user", postgres_db_user). \
-        option("password", postgres_db_password). \
-        mode("append"). \
-        save()
+    df = transform_df_salaries(df)
+    if not df.rdd.isEmpty():
+        df.write.format("jdbc"). \
+            option("url", postgres_db). \
+            option("driver", "org.postgresql.Driver"). \
+            option("dbtable", f"public.players_injuries"). \
+            option("user", postgres_db_user). \
+            option("password", postgres_db_password). \
+            mode("append"). \
+            save()
 
 
 urls_flags = scrap_urls_and_flags(URL)

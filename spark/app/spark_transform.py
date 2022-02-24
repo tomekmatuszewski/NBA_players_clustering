@@ -44,3 +44,17 @@ def filter_injuries_df(df: DataFrame):
     return df
 
 
+def transform_df_salaries(df: DataFrame) -> DataFrame:
+    fields_to_stay = ["Rank", "Player", "flag"]
+    fields_to_remove = [df.columns[index] for index in range(len(df.columns)) if index > 3 and
+                        df.columns[index] not in fields_to_stay]
+    field_to_change_name = [df.columns[index] for index in range(len(df.columns)) if 2 <= index <= 3]
+    if fields_to_remove:
+        df = df.drop(*fields_to_remove)
+    for index in range(len(field_to_change_name)):
+        if index == 0:
+            df = df.withColumnRenamed(field_to_change_name[index], "salary")
+        else:
+            df = df.withColumnRenamed(field_to_change_name[index], "current_salary_inflation")
+    return df
+

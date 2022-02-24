@@ -37,9 +37,6 @@ spark = SparkSession.builder \
     .config("spark.repl.local.jars", path_to_jar) \
     .getOrCreate()
 
-sc = spark.sparkContext
-
-
 def load_to_postgres(url: str, table: str, service) -> None:
     column_names, data = get_schema_stats(url), get_stats_data(url, service)
     schema = create_table_schema(column_names)
