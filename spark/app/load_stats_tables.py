@@ -37,6 +37,7 @@ spark = SparkSession.builder \
     .config("spark.repl.local.jars", path_to_jar) \
     .getOrCreate()
 
+
 def load_to_postgres(url: str, table: str, service) -> None:
     column_names, data = get_schema_stats(url), get_stats_data(url, service)
     schema = create_table_schema(column_names)
@@ -45,7 +46,7 @@ def load_to_postgres(url: str, table: str, service) -> None:
     df.write.format("jdbc"). \
         option("url", postgres_db). \
         option("driver", "org.postgresql.Driver"). \
-        option("dbtable", f"public.player_stats_data"). \
+        option("dbtable", f"public.players_stats"). \
         option("user", postgres_db_user). \
         option("password", postgres_db_password). \
         mode("append"). \

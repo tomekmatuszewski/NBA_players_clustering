@@ -28,7 +28,7 @@ def create_dataframe(data: list, schema: StructType, spark: SparkSession, flag: 
 
 def get_converted_stats_df(df: DataFrame) -> DataFrame:
     integer_fields = ["RK", "GP", "DD2", "TD3"]
-    string_fields = ["Name", "POS", "season"]
+    string_fields = ["Name", "POS", "flag"]
     for column in df.columns:
         if column in integer_fields:
             df = df.withColumn(column, col(column).cast(IntegerType()))
@@ -40,7 +40,7 @@ def get_converted_stats_df(df: DataFrame) -> DataFrame:
 
 
 def filter_injuries_df(df: DataFrame):
-    df.filter(col('PLAYER') != 'PLAYER')
+    df = df.filter(col('PLAYER') != 'PLAYER')
     return df
 
 

@@ -1,4 +1,3 @@
-import time
 import os
 from bs4 import BeautifulSoup
 import requests
@@ -52,8 +51,3 @@ async def main_crawler(urls: list):
         tasks = [get_data(url[0], session) for url in urls]
         data = await asyncio.gather(*tasks)
         return data
-
-
-
-
-

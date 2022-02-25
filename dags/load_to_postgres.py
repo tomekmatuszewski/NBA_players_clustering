@@ -63,4 +63,8 @@ with dag:
         driver_class_path=path_to_jar
     )
 
-    job1 >> [job2, job3, job4]
+    job5 = DummyOperator(
+        task_id="stop"
+    )
+
+    job1 >> job3 >> job4 >> job2 >> job5

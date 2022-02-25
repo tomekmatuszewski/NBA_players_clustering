@@ -6,6 +6,7 @@ from web_scraper_extract_salaries import get_schema, scrap_urls_and_flags, main_
 from spark_transform import create_table_schema, create_dataframe, transform_df_salaries
 import asyncio
 import pathlib
+from concurrent.futures import ThreadPoolExecutor
 
 BASEDIR = pathlib.Path(__name__).resolve().parent.parent
 
@@ -34,6 +35,7 @@ spark = SparkSession.builder \
     .config("spark.repl.local.jars", path_to_jar) \
     .getOrCreate()
 
+
 def load_to_postgres(url_table: tuple, data: list) -> None:
     schema = create_table_schema(get_schema(url_table[0]))
     df = create_dataframe(data, schema, spark, url_table[1])
@@ -42,7 +44,7 @@ def load_to_postgres(url_table: tuple, data: list) -> None:
         df.write.format("jdbc"). \
             option("url", postgres_db). \
             option("driver", "org.postgresql.Driver"). \
-            option("dbtable", f"public.players_injuries"). \
+            option("dbtable", f"public.players_salaries"). \
             option("user", postgres_db_user). \
             option("password", postgres_db_password). \
             mode("append"). \
@@ -52,5 +54,8 @@ def load_to_postgres(url_table: tuple, data: list) -> None:
 urls_flags = scrap_urls_and_flags(URL)
 data = asyncio.run(main_crawler(urls_flags))
 
-for url_table, data in zip(urls_flags, data):
-    load_to_postgres(url_table, data)
+# for url_table, data in zip(urls_flags, data):
+#     load_to_postgres(url_table, data)
+
+with ThreadPoolExecutor() as executor:
+    executor.map(load_to_postgres, urls_flags, data)

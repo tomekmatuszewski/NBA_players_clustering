@@ -6,6 +6,7 @@ from pathlib import Path
 from web_scraper_extract_injuries import get_schema, scrap_urls_and_flags, main_crawler
 from spark_transform import create_table_schema, create_dataframe, filter_injuries_df
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 BASEDIR = Path(__file__).resolve().parent.parent
 
@@ -34,6 +35,7 @@ spark = SparkSession.builder \
     .config("spark.repl.local.jars", path_to_jar) \
     .getOrCreate()
 
+
 def load_to_postgres(url_table: tuple, data: list) -> None:
     schema = create_table_schema(get_schema(url_table[0]))
     df = create_dataframe(data, schema, spark, url_table[1])
@@ -51,5 +53,15 @@ def load_to_postgres(url_table: tuple, data: list) -> None:
 urls_flags = scrap_urls_and_flags(URL)
 data = asyncio.run(main_crawler(urls_flags))
 
-for url_table, data in zip(urls_flags, data):
-    load_to_postgres(url_table, data)
+# for url_table, data in zip(urls_flags, data):
+#     load_to_postgres(url_table, data)
+
+with ThreadPoolExecutor() as executor:
+    executor.map(load_to_postgres, urls_flags, data)
+
+
+if __name__ == "__main__":
+    urls_flags = scrap_urls_and_flags(URL)
+    data = asyncio.run(main_crawler(urls_flags))
+    for url_table, data in zip(urls_flags, data):
+        print(load_to_postgres(url_table, data))

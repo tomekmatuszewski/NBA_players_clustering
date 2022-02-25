@@ -9,4 +9,3 @@ apache-airflow-providers-postgres
 selenium
 webdriver-manager
 aiohttp
-asyncio
