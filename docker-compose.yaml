@@ -190,6 +190,18 @@ services:
       SPARK_WORKER_MEMORY: '1G'
       SPARK_WORKER_CORES: 1
 
+  jupyter-spark:
+    image: jupyter/pyspark-notebook:latest
+    networks:
+      - default_net
+    ports:
+      - "8888:8888"
+      - "4040-4080:4040-4080"
+    volumes:
+      - ./notebooks:/home/tm/work/notebooks/
+      - ./spark:/home/tm/work/data/
+
+
 networks:
     default_net:
 
