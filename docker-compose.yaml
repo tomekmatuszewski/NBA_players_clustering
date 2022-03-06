@@ -100,6 +100,9 @@ services:
       dockerfile: dockerfiles/Dockerfile_postgres
     networks:
       - default_net
+    volumes:
+      - ./postgres-data:/data
+      - ./postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
@@ -198,8 +201,8 @@ services:
       - "8888:8888"
       - "4040-4080:4040-4080"
     volumes:
-      - ./notebooks:/home/tm/work/notebooks/
-      - ./spark:/home/tm/work/data/
+      - ./notebooks:/home/jovyan/work/notebooks/
+      - ./spark:/home/jovyan/work/data/
 
 
 networks:
