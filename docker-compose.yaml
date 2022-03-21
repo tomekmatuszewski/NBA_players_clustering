@@ -193,6 +193,15 @@ services:
       SPARK_WORKER_MEMORY: '1G'
       SPARK_WORKER_CORES: 1
 
+  spark-worker-2:
+    <<: *spark-common
+    environment:
+      <<: *spark-common-env
+      SPARK_MODE: 'worker'
+      SPARK_MASTER_URL: 'spark://spark:7077'
+      SPARK_WORKER_MEMORY: '1G'
+      SPARK_WORKER_CORES: 1
+
   jupyter-spark:
     image: jupyter/pyspark-notebook:latest
     networks:

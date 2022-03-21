@@ -9,7 +9,7 @@
     Services created in docker containers (Docker, docker-compose)
 
 ### Data analysis
-    Python, Pyspark, Jupyter -> TBD
+    Python, Pyspark, Pandas, Jupyter -> TBD
 
 
 
