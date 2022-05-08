@@ -1,5 +1,5 @@
 ## NBA players clustering
-## Final project - AGH Data Science/Big Data postgraduates study
+## Final project - AGH Data Science/Data Analytics postgraduates study
 
 ### Data engineering ->
     Apache Airflow -> orchiestration
